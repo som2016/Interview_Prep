@@ -1,0 +1,346 @@
+to extend lvm without loosing data:
+
+lvextend -L +1G /dev/vg1/lvm1 >> for ext4
+resize2fs /dev/vg1/lv1 >> use xfs_growfs for xfs file system
+
+
+
+
+
+ lvremove /dev/custom_vg/lv_1 
+Do you really want to remove active logical volume custom_vg/lv_1? [y/n]: y
+  Logical volume "lv_1" successfully removed
+[root@localhost som]# lvs
+  LV   VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  root centos -wi-ao---- <12.50g                                                    
+  swap centos -wi-ao----   1.50g                                                    
+[root@localhost som]# vgs
+  VG        #PV #LV #SN Attr   VSize   VFree 
+  centos      1   2   0 wz--n- <14.00g     0 
+  custom_vg   3   0   0 wz--n-  <4.99g <4.99g
+[root@localhost som]# vgremove custom_vg 
+  Volume group "custom_vg" successfully removed
+[root@localhost som]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree
+  centos   1   2   0 wz--n- <14.00g    0 
+[root@localhost som]# pvs
+  PV         VG     Fmt  Attr PSize   PFree 
+  /dev/sda2  centos lvm2 a--  <14.00g     0 
+  /dev/sda3         lvm2 ---    1.00g  1.00g
+  /dev/sda5         lvm2 ---    2.00g  2.00g
+  /dev/sda6         lvm2 ---   <2.00g <2.00g
+[root@localhost som]# pvremove /dev/sda2 /dev/sda23
+  Can't open /dev/sda2 exclusively.  Mounted filesystem?
+  Device /dev/sda23 not found (or ignored by filtering).
+[root@localhost som]# pvre
+pvremove  pvresize  
+[root@localhost som]# pvre
+pvremove  pvresize  
+[root@localhost som]# pvremove /dev/sda3
+  Labels on physical volume "/dev/sda3" successfully wiped.
+[root@localhost som]# pvremove /dev/sda5
+  Labels on physical volume "/dev/sda5" successfully wiped.
+[root@localhost som]# pvremove /dev/sda6
+  Labels on physical volume "/dev/sda6" successfully wiped.
+[root@localhost som]# pvs
+  PV         VG     Fmt  Attr PSize   PFree
+  /dev/sda2  centos lvm2 a--  <14.00g    0 
+[root@localhost som]# fdisk /dev/sda 
+Welcome to fdisk (util-linux 2.23.2).
+
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+
+Command (m for help): m
+Command action
+   a   toggle a bootable flag
+   b   edit bsd disklabel
+   c   toggle the dos compatibility flag
+   d   delete a partition
+   g   create a new empty GPT partition table
+   G   create an IRIX (SGI) partition table
+   l   list known partition types
+   m   print this menu
+   n   add a new partition
+   o   create a new empty DOS partition table
+   p   print the partition table
+   q   quit without saving changes
+   s   create a new empty Sun disklabel
+   t   change a partition's system id
+   u   change display/entry units
+   v   verify the partition table
+   w   write table to disk and exit
+   x   extra functionality (experts only)
+
+Command (m for help): d
+Partition number (1-6, default 6): 3
+Partition 3 is deleted
+
+Command (m for help): d
+Partition number (1,2,4-6, default 6): 5
+Partition 5 is deleted
+
+Command (m for help): d
+Partition number (1,2,4,5, default 5): 6
+Value out of range.
+Partition number (1,2,4,5, default 5): 5
+Partition 5 is deleted
+
+Command (m for help): p
+
+Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x000cbe0a
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048     2099199     1048576   83  Linux
+/dev/sda2         2099200    31457279    14679040   8e  Linux LVM
+/dev/sda4        33554432    41943039     4194304    5  Extended
+
+Command (m for help): d
+Partition number (1,2,4, default 4): 4
+Partition 4 is deleted
+
+Command (m for help): n 
+Partition type:
+   p   primary (2 primary, 0 extended, 2 free)
+   e   extended
+Select (default p): p
+Partition number (3,4, default 3): 3
+First sector (31457280-41943039, default 31457280):  
+Using default value 31457280
+Last sector, +sectors or +size{K,M,G} (31457280-41943039, default 41943039): +1G
+Partition 3 of type Linux and of size 1 GiB is set
+
+Command (m for help): n
+Partition type:
+   p   primary (3 primary, 0 extended, 1 free)
+   e   extended
+Select (default e): e
+Selected partition 4
+First sector (33554432-41943039, default 33554432): 
+Using default value 33554432
+Last sector, +sectors or +size{K,M,G} (33554432-41943039, default 41943039): 
+Using default value 41943039
+Partition 4 of type Extended and of size 4 GiB is set
+
+Command (m for help): n
+All primary partitions are in use
+Adding logical partition 5
+First sector (33556480-41943039, default 33556480): 
+Using default value 33556480
+Last sector, +sectors or +size{K,M,G} (33556480-41943039, default 41943039): +2G
+Partition 5 of type Linux and of size 2 GiB is set
+
+Command (m for help): n
+All primary partitions are in use
+Adding logical partition 6
+First sector (37752832-41943039, default 37752832): 
+Using default value 37752832
+Last sector, +sectors or +size{K,M,G} (37752832-41943039, default 41943039): 
+Using default value 41943039
+Partition 6 of type Linux and of size 2 GiB is set
+
+Command (m for help): p
+
+Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x000cbe0a
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048     2099199     1048576   83  Linux
+/dev/sda2         2099200    31457279    14679040   8e  Linux LVM
+/dev/sda3        31457280    33554431     1048576   83  Linux
+/dev/sda4        33554432    41943039     4194304    5  Extended
+/dev/sda5        33556480    37750783     2097152   83  Linux
+/dev/sda6        37752832    41943039     2095104   83  Linux
+
+Command (m for help): m
+Command action
+   a   toggle a bootable flag
+   b   edit bsd disklabel
+   c   toggle the dos compatibility flag
+   d   delete a partition
+   g   create a new empty GPT partition table
+   G   create an IRIX (SGI) partition table
+   l   list known partition types
+   m   print this menu
+   n   add a new partition
+   o   create a new empty DOS partition table
+   p   print the partition table
+   q   quit without saving changes
+   s   create a new empty Sun disklabel
+   t   change a partition's system id
+   u   change display/entry units
+   v   verify the partition table
+   w   write table to disk and exit
+   x   extra functionality (experts only)
+
+Command (m for help): t
+Partition number (1-6, default 6): 3
+Hex code (type L to list all codes): 8e
+Changed type of partition 'Linux' to 'Linux LVM'
+
+Command (m for help): p
+
+Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x000cbe0a
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048     2099199     1048576   83  Linux
+/dev/sda2         2099200    31457279    14679040   8e  Linux LVM
+/dev/sda3        31457280    33554431     1048576   8e  Linux LVM
+/dev/sda4        33554432    41943039     4194304    5  Extended
+/dev/sda5        33556480    37750783     2097152   83  Linux
+/dev/sda6        37752832    41943039     2095104   83  Linux
+
+Command (m for help): t
+Partition number (1-6, default 6): 5
+Hex code (type L to list all codes): 8e
+Changed type of partition 'Linux' to 'Linux LVM'
+
+Command (m for help): t
+Partition number (1-6, default 6): 6
+Hex code (type L to list all codes): 8e
+Changed type of partition 'Linux' to 'Linux LVM'
+
+Command (m for help): 
+Command (m for help): p
+
+Disk /dev/sda: 21.5 GB, 21474836480 bytes, 41943040 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x000cbe0a
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048     2099199     1048576   83  Linux
+/dev/sda2         2099200    31457279    14679040   8e  Linux LVM
+/dev/sda3        31457280    33554431     1048576   8e  Linux LVM
+/dev/sda4        33554432    41943039     4194304    5  Extended
+/dev/sda5        33556480    37750783     2097152   8e  Linux LVM
+/dev/sda6        37752832    41943039     2095104   8e  Linux LVM
+
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+
+WARNING: Re-reading the partition table failed with error 16: Device or resource busy.
+The kernel still uses the old table. The new table will be used at
+the next reboot or after you run partprobe(8) or kpartx(8)
+Syncing disks.
+[root@localhost som]# 
+[root@localhost som]# 
+[root@localhost som]# pvs
+  PV         VG     Fmt  Attr PSize   PFree
+  /dev/sda2  centos lvm2 a--  <14.00g    0 
+[root@localhost som]# pvcreate /dev/sda3 /dev/sda5 /dev/sda6
+  Physical volume "/dev/sda3" successfully created.
+  Physical volume "/dev/sda5" successfully created.
+  Physical volume "/dev/sda6" successfully created.
+[root@localhost som]# pvs
+  PV         VG     Fmt  Attr PSize   PFree 
+  /dev/sda2  centos lvm2 a--  <14.00g     0 
+  /dev/sda3         lvm2 ---    1.00g  1.00g
+  /dev/sda5         lvm2 ---    2.00g  2.00g
+  /dev/sda6         lvm2 ---   <2.00g <2.00g
+[root@localhost som]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree
+  centos   1   2   0 wz--n- <14.00g    0 
+[root@localhost som]# vgcreate vgone /dev/sda3 /dev/sda5 /dev/sda6
+  Volume group "vgone" successfully created
+[root@localhost som]# 
+[root@localhost som]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree 
+  centos   1   2   0 wz--n- <14.00g     0 
+  vgone    3   0   0 wz--n-  <4.99g <4.99g
+[root@localhost som]# vgreduce vgone /dev/sda6
+  Removed "/dev/sda6" from volume group "vgone"
+[root@localhost som]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree
+  centos   1   2   0 wz--n- <14.00g    0 
+  vgone    2   0   0 wz--n-   2.99g 2.99g
+[root@localhost som]# vgextend vgone /dev/sda6
+  Volume group "vgone" successfully extended
+[root@localhost som]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree 
+  centos   1   2   0 wz--n- <14.00g     0 
+  vgone    3   0   0 wz--n-  <4.99g <4.99g
+[root@localhost som]# vgsplit vgone vgtwo /dev/sda6
+  New volume group "vgtwo" successfully split from "vgone"
+[root@localhost som]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree 
+  centos   1   2   0 wz--n- <14.00g     0 
+  vgone    2   0   0 wz--n-   2.99g  2.99g
+  vgtwo    1   0   0 wz--n-  <2.00g <2.00g
+[root@localhost som]# vgmerge vgone vg
+vgone  vgtwo  
+[root@localhost som]# vgmerge vgone vg
+vgone  vgtwo  
+[root@localhost som]# vgmerge vgone vgtwo 
+  Volume group "vgtwo" successfully merged into "vgone"
+[root@localhost som]# 
+[root@localhost som]# 
+[root@localhost som]# vgs
+  VG     #PV #LV #SN Attr   VSize   VFree 
+  centos   1   2   0 wz--n- <14.00g     0 
+  vgone    3   0   0 wz--n-  <4.99g <4.99g
+[root@localhost som]# 
+[root@localhost som]# 
+[root@localhost som]# lvcreate -L2G -n lvone vgone 
+  Logical volume "lvone" created.
+[root@localhost som]# 
+[root@localhost som]# 
+[root@localhost som]# mkfs.ext4 /dev/
+Display all 170 possibilities? (y or n)
+[root@localhost som]# mkfs.ext4 /dev/vg
+vga_arbiter  vgone/       
+[root@localhost som]# mkfs.ext4 /dev/vg
+vga_arbiter  vgone/       
+[root@localhost som]# mkfs.ext4 /dev/vgone/lvone 
+mke2fs 1.42.9 (28-Dec-2013)
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+131072 inodes, 524288 blocks
+26214 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=536870912
+16 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks: 
+	32768, 98304, 163840, 229376, 294912
+
+Allocating group tables: done                            
+Writing inode tables: done                            
+Creating journal (16384 blocks): done
+Writing superblocks and filesystem accounting information: done 
+
+[root@localhost som]# 
+[root@localhost som]# 
+[root@localhost som]# pwd
+/home/som
+[root@localhost som]# mkdir lvonemountpoint
+[root@localhost som]# mount /dev/vg
+vga_arbiter  vgone/       
+[root@localhost som]# mount /dev/vg
+vga_arbiter  vgone/       
+[root@localhost som]# mount /dev/vgone/lvone  /home/som/lvonemountpoint/
+[root@localhost som]# gedit /etc/fstab
+

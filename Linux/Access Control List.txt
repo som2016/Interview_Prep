@@ -1,0 +1,41 @@
+ACL : Access control List helps to give a specific user(S) and secifig group(s) to access a folder or execute a script or just read.(rwx)
+
+mkdir pr1
+
+[root@manager myproject]# chmod 000 pr1
+[root@manager myproject]# setfacl -m u:som:rwx pr1
+[root@manager myproject]# ll
+total 0
+d---rwx---+ 3 root root 25 Sep 18 13:57 pr1  // here max. permissions get changed autmatically
+drwxr-xr-x. 2 root root  6 Sep 18 10:54 pr2
+[root@manager myproject]# exit
+exit
+[p1@manager myproject]$ su som
+Password: 
+[som@manager myproject]$ cd p1
+bash: cd: p1: No such file or directory
+[som@manager myproject]$ cd pr1
+[som@manager pr1]$  // if we had only gave wr it wouldnt allow us to enter the folder.
+
+
+similarly for group as well:
+
+setfacl -dm g:testgroup2:rx pr1 // it can enter the folder and read it contents d for default permissions in case we use this we need to
+execute the same cmd twice by removig d as shown below:
+
+setfacl -m g:testgroup2:rx pr1
+
+
+remove a particular acl:
+
+setfacl -x g:testgroup2:rx pr1
+
+remove all acl's:
+
+setfacl -b pr1
+
+check what acls are defined:
+
+getfacl foldername
+
+  

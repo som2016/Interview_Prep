@@ -1,0 +1,18 @@
+# blue green deployment (Can be done as mentioned in ansible doc. as well)
+---
+- hosts: localhost
+  tasks:
+  - name: gather elb facts
+    ec2_elb_facts:
+      names: deployapp
+      region: us-west-1
+    register: lb_facts
+      
+  - name: get facts
+    set_fact:
+     elb_id: lb_facts.elbs.0.dns_name  
+
+  - debug:
+     var: "{{ elb_id }}}"
+     verbosity: 1     
+     

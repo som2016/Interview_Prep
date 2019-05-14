@@ -1,0 +1,54 @@
+ ************  In Main Server the folder you want to share***********
+======================================================================
+   41  yum install nfs* -y
+   42  yum install nfs-utils -y
+   44  yum install libnfs* -y
+   45  systemctl enable rpcbind
+   46  systemctl enable nfs-server
+   47  systemctl start rpcbind
+   48  systemctl start nfs-server
+   49  systemctl start rpc-statd
+   51  systemctl start nfs-idmapd
+   52  cat /etc/exports #/shared Ip(rw,sync)
+
+   55  exportfs -r
+   56  exportfs -v
+   57  showmount -e localhost
+   58  exportfs -a
+   59  chmod 777 /shared
+
+
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --permanent --add-port=2049/tcp
+firewall-cmd --permanent --add-port=2049/udp
+firewall-cmd --reload
+ then restart the above services or reboot
+
+
+ ************  In the Client server where u want to see***********
+======================================================================
+   41  yum install nfs* -y
+   42  yum install nfs-utils -y
+   44  yum install libnfs* -y
+   45  systemctl enable rpcbind
+   46  systemctl enable nfs-server
+   47  systemctl start rpcbind
+   48  systemctl start nfs-server
+   49  systemctl start rpc-statd
+   51  systemctl start nfs-idmapd
+
+
+showmount -e 192.168.137.137 
+exportfs -a
+mount 192.168.137.137:/home/som/shared /home/som/sharedclient/ or infstab
+
+ip:/home/som/shared /home/som/sharedclient/ 0 0
+
+mount -a
+
+
+
+
+
+

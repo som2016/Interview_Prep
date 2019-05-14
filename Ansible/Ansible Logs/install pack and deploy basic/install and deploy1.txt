@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  vars:
+   packages:
+   - httpd
+   - httpd-tools
+   - nano
+   - tomcat
+
+   src_path: /etc/ansible/
+   dest_path: /var/www/html/
+
+  tasks:
+  - name: Install packages
+    yum: name="{{packages}}" state=latest update_cache=true
+
+  - name: service restarted script
+    shell: systemctl restart httpd >> /ansiblelogs/logs.txt
+    shell: systemctl restart tomcat >> /ansiblelogs/logs.txt
+
+  #- name: execute the sh file
+   # command: sh /etc/ansible/second.sh
+
+  - name: Copy a index.html file to remote
+    copy: src={{ src_path}}/index.html dest={{ dest_path}}
+    notify: restart httpd
+
+  handlers:
+  - name: restart httpd
+    service: name=httpd state=restarted
+

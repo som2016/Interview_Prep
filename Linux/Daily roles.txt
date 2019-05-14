@@ -1,0 +1,11 @@
+installing os using ks
+installing packages and  managing packages
+configuring yum repo.
+adding storage toesxi host and configuring it
+patch management
+alarms troubleshooting
+managing lvms
+backups
+configuring servers as per requirement
+
+https://iamlinuxadmin.blogspot.com/2013/03/linux-admin-daily-activity.html

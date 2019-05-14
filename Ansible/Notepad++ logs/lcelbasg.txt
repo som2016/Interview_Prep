@@ -1,0 +1,135 @@
+# Load Balancer Security Group Auto-Scalling Launch Configuration
+---
+- hosts: localhost
+  tasks:
+  - name: get vpc_id to mention it in next task
+    ec2_vpc_net_facts:
+     region: us-west-1
+     filters:
+      "tag:Name": vpc-test
+    register: default_vpc
+  
+  - name: Get VPC Group-id
+    set_fact:
+     vpc_id: "{{ default_vpc.vpcs[0].id }}"
+     
+  - name: Create security_group
+    ec2_group:
+     name: security_group1
+     description: security_group1
+     region: us-west-1
+     vpc_id: "{{ vpc_id }}"
+     rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+     rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+    register: group_fact      
+  
+  - name: Get Security Group-id
+    set_fact:
+     security_group_fact: "{{ group_fact.group_id }}"
+     
+  - name: Create a new Launc config
+    ec2_lc:
+     name: launch_1
+     region: us-west-1
+     key_name: id_rsa
+     instance_type: t2.micro
+     image_id: ami-011b6930a81cd6aaf
+     security_groups: "{{ security_group_fact }}"
+  
+     
+  - name: Get public Subnet Facts 
+    ec2_vpc_subnet_facts:
+     region: us-west-1
+     filters:
+       vpc-id: "{{ vpc_id }}" 
+       "tag:Name": publicsubnet
+    register: vpc_public_subnet_facts   
+   
+  - name: Get Private subnet Facts 
+    ec2_vpc_subnet_facts:
+     region: us-west-1
+     filters:
+      vpc-id: "{{ vpc_id }}" 
+      "tag:Name": privatesubnet
+    register: vpc_private_subnet_facts
+
+  - debug:
+      var: vpc_private_subnet_facts
+      verbosity: 1
+  
+  - debug:
+      var: vpc_public_subnet_facts
+      verbosity: 1
+
+
+  - name: Show Public Subnet Facts for 0th element
+    debug:
+      var: vpc_public_subnet_facts.subnets[0].id
+      verbosity: 1
+
+  - name: Show Private Subnet Facts for 0th element
+    debug:
+      var: vpc_private_subnet_facts.subnets[0].id
+      verbosity: 1
+
+  - set_fact:
+     vpc_private_subnet_id1: "{{ vpc_private_subnet_facts.subnets[0].id }}"
+     vpc_private_subnet_id2: "{{ vpc_private_subnet_facts.subnets[1].id }}"
+
+  - set_fact:
+     vpc_public_subnet_id1: "{{ vpc_public_subnet_facts.subnets[0].id }}"
+     vpc_public_subnet_id2: "{{ vpc_public_subnet_facts.subnets[1].id }}"
+
+  
+  - name: Create elastic load balancer
+    ec2_elb_lb:
+     state: present
+     name: deployapp
+     region: us-west-1
+     security_group_ids: "{{ security_group_fact }}" 
+     subnets:
+      - "{{ vpc_public_subnet_id1 }}"
+      - "{{ vpc_public_subnet_id2 }}"
+     listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80
+     health_check:
+      ping_protocol: http
+      ping_port: 80
+      ping_path: "/index.html"
+      response_timeout: 10
+      interval: 30
+      unhealthy_threshold: 6
+      healthy_threshold: 2
+    register: deployapp_reg
+    
+  - name: Create a auto Scalling group
+    ec2_asg:
+     name: asg_1
+     region: us-west-1
+     launch_config_name: launch_1
+     load_balancers: 
+      - deployapp
+     vpc_zone_identifier:
+       - "{{ vpc_public_subnet_id1 }}"
+       - "{{ vpc_public_subnet_id2 }}"
+     min_size: 1
+     max_size: 2
+     desired_capacity: 1
+     health_check_type: ELB
+     health_check_period: 300
+     state: present
+        
+
+     

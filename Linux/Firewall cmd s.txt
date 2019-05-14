@@ -1,0 +1,36 @@
+       firewall-cmd --list-all // shows services that are enabled in current default zone
+  121  systemctl enable firewalld
+  122  systemctl start firewalld
+    
+  125  systemctl is-enabled firewalld  // gives info abt default zones
+  128  firewall-cmd --get-zones        //lis of available zones
+  129  firewall-cmd --get-default-zone // which is current default zone
+  130  firewall-cmd --set-default-zone=block  // set default zone
+  131  firewall-cmd --set-default-zone=public
+  132  firewall-cmd --add-port=3306/tcp --permanent  //add port 
+  133  firewall-cmd --reload
+  134  firewall-cmd --list-all
+  135  firewall-cmd --remove-port=3306/tcp --permanent  //remove port
+  136  firewall-cmd --add-service=mysql --permanent  //addservices
+  137  firewall-cmd --list-all
+  145  firewall-cmd --add-service=ssh --permanent
+  146  firewall-cmd --add-service=ftp --permanent
+  147  firewall-cmd --get-services  // list of available services
+  148  firewall-cmd --add-port=8080/tcp --permanent
+  149  netstat -nltp  //see list of ports that are in use
+  152  firewall-cmd --add-forward-port=port=8080:proto=tcp:toport=80
+  153  firewall-cmd --remove-forward-port=port=8080:proto=tcp:toport=80
+  154  firewall-cmd reload
+  155  firewall-cmd --reload
+  
+  166  cp /usr/lib/firewalld/services/mysql.xml /etc/firewalld/services/  // to create custom service to add in firewall
+  168  mv mysql.xml myapp.xml
+  169  ll
+  170  nano myapp.xml 
+  171  firewall-cmd --reload
+  172  firewall-cmd --list-services // shows services that are enabled in current default zone
+  173  firewall-cmd --get-services 
+  178  firewall-cmd --get-services | grep myapp 
+  180  firewall-cmd --add-service=myapp
+  181  firewall-cmd --list-all
+

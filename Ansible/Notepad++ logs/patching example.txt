@@ -1,0 +1,15 @@
+# patching example
+---
+- hosts: localhost
+  become_user: root
+  serial: 1
+  max_fail_percentage: 50
+  
+  pre_tasks:
+  - name: disable nagios alerts for localhost
+    nagios: action=disable_alerts hosts={{ ansible_hostname }} service=localhost
+    delegate_to: "{{ item }}"
+    with_items: groups.monitoring
+     
+  - name: remove from ELB
+    {{ ansible_facts['distribution_version'] is version('12.04', '>=') }}

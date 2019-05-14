@@ -1,0 +1,58 @@
+Ansible with AWS:
+
+Ansible Dynamic inventory with aws
+launch ec2
+create sg
+create subnet vpc and igw
+create load balancer
+create auto scaling group
+launch s3
+IAM Group
+IAM Policy
+IAM admin group
+IAM user
+ec2_instance
+--------------
+
+image_id
+instance type
+region
+vpc subnet id
+group id
+key_name
+assgin_public_ip:
+wait: yes
+count:
+
+ec2_group:
+- name:
+  descreiption:
+  region:
+  rules
+  - proto:
+     from_port:
+     to_port:
+     cidr_ip:
+   rules_egress
+  - proto:
+     cidr_ip:
+
+
+provisioned iops
+general purpose ssd
+throughput optimized and cold hdd
+
+s3 standered 99.eleven 99
+s3 rrs 99.99
+infrequent access
+amazon glacier
+
+elastic load balancer:
+cross zone routing
+path based routing
+
+autoscalling group:
+fixed
+manual
+dynamic
+scheduled

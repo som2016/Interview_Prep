@@ -1,0 +1,32 @@
+
+[root@localhost yum.repos.d]# blkid
+/dev/sr0: UUID="2017-09-06-10-53-42-00" LABEL="CentOS 7 x86_64" TYPE="iso9660" PTTYPE="dos" 
+
+mount /dev/sr0 /mnt
+ cd /mnt
+
+
+mkdir /repodata
+
+cd /mnt
+  426  ll
+  427  cp -rvf {repodata/,Packages/} /repodata
+  428  cd /repodata
+  429  ll
+
+
+cd /etc/yum.repos.d/
+  431  ll
+  432  echo "[customrepo]" >> customrepo.repo
+  433  cat customrepo.repo 
+  434  echo "[name=localrepo]" >> customrepo.repo
+  435  echo "[baseurl=file:///repodata]" >> customrepo.repo
+  436  echo "[enabled=1]" >> customrepo.repo
+  437  echo "[gpgcheck=0]" >> customrepo.repo      #remove the brackets after 1st line
+
+
+ yum repoclean
+
+yum repolist
+
+yum list

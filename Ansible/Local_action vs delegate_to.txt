@@ -1,0 +1,7 @@
+local_action will always take place on the system that you are running the playbook from, delegateto will take
+place on any host that you indicate.
+
+
+When you would use them depends on what you are doing, but you could be copying a backup image from your local machine
+ to a remote system (local_action using the copy module for example) and then running a test against that using a 
+utility installed on another system (delegateto your logging server for example).

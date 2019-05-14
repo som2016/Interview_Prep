@@ -1,0 +1,25 @@
+# IAM create user and group
+---
+- hosts: localhost
+  tasks:
+  - name: create two user
+    iam:
+     iam_type: user
+     name: "{{ item }}"
+     password: "{{ redhat123 }}"
+     state: present
+     access_key_state: create
+    with_items:
+     - ram
+     - sam
+     
+  - name: create two Group
+    iam:
+     iam_type: group
+     name: "{{ item }}"
+     state: present
+    with_items
+     - group1
+     - group2
+     
+     

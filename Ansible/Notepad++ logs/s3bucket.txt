@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+   - name: Creating a s3_bucket 
+     s3_bucket:
+      name: bucketlist1
+#      policy: "{{ lookup('file', 'policy.json') }}" blocked as no proper json exists
+      versioning: yes
+      tags:
+       abcd: tag1
+     
+   - name: S3 sync
+     s3_sync:
+       bucket: bucketlist1
+       file_root: /etc/ansible
+     
+   

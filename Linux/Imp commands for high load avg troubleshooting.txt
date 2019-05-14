@@ -1,0 +1,3 @@
+netstat > n/w statistics
+vmstat> virtual memory report/statistics
+iostat> input output report

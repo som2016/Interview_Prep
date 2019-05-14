@@ -1,0 +1,8 @@
+Handlers and Failure
+When a task fails on a host, handlers which were previously notified will not be run on that host. This can lead to cases where an unrelated failure can leave a host in an unexpected state. For example, a task could update a configuration file and notify a handler to restart some service.
+If a task later on in the same play fails, the service will not be restarted despite the configuration change.
+
+You can change this behavior with the --force-handlers command-line option, 
+or by including force_handlers: True in a play, or force_handlers = True in ansible.cfg. When handlers are forced, 
+they will run when notified even if a task fails on that host. (Note that certain errors could still prevent the handler 
+from running, such as a host becoming unreachable.)

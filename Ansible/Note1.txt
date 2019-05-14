@@ -1,0 +1,39 @@
+a18121344111
+
+/etc/ssh/sshd_config
+
+for new custom ansible config file:
+---------------------------------------
+export ANSIBLE_CONFIG=path
+
+for new custom role's:
+--------------------------
+change in ansible config.file roles path
+
+for new custom Hosts file:
+-------------------------------
+1. change in ansible config file
+     or
+2.  ansible myhost -i hosts -m ping
+
+shell script coudn't run incommand module coz it need to be placed in romote dir
+
+
+ansible adhoc shell service check cmd
+target -- aws
+whats jinja2
+jijnja map function
+whats boto
+hybrid inventory
+group hosts inventory like static hosts
+start stopped instance
+dict?? >> dict stands for dictionary used as its easy to use it also uses item.key and item.value
+add playbook/combine playbook
+
+ssh-add /etc/ansible/id_rsa.pub
+
+
+    Access Key ID:
+    
+    Secret Access Key:
+    qVi7TkUTbQl6lK7v5uKLdCgoVmC4HATbHB2oKdaH

@@ -1,0 +1,107 @@
+docker run image_name > to run the image
+
+docker ps > to see running process/container ps=process
+
+docker ps -a > to see all running containers/process
+
+docker run  --name mycontainer hello-world  > give a container name and run the image
+
+docker run -itd image_name  > run the image in a container in detached mode. in ds mode u can manage multiple containers life cycle.
+
+docker stop containerid > to stop the running container that came up in itd or it mode
+
+docker run -it image_name > run image in interactive mode
+
+exit > to get out of the interactive container while stopping it
+
+ctrl+p & ctrl+q > to get out of the interactive container while kept on running the container without stopping it.
+
+docker start containerid > to start a running container
+
+docker attach containerid > to attach to a running container.
+
+docker rm containerid > remove container
+
+docker rmi imagename > remove images
+
+docker run -it --name ubuntu_os1 -v hostfolder:/containerfolder1 ubuntu  > (for new containers)hostfolder is a folder used as sharing folder across containers for sharing purpose
+
+docker cp (from) container_name:conatiner_path (to) host_path > to copy from container to host machine
+									----------both of them fo already generated containers
+docker cp (from) host_path (to)container_name:container_path > to copy from hosts to container 
+
+docker build -t som2018/my_image:customdockerfile . > . reperesent current dir. hence cmd will search for docker file in current dir in ds a image will be generated
+
+docker commit container_name docker.io/som2018/my_image:customimage  > create aand commit a custom image
+
+docker tag docker.io/ubuntu som2018/my_image:freshubuntu > tagging, copyin a image
+
+docker export container_name > name.tar
+                              --- container exported to form a image
+docker import - new_image_name < name.tar  > here new image name had to be mentioned cause it is created from container
+
+docker save -o name.tar which_image_needed_to_be_saved  > exact image with image name saved hence no name needed
+
+docker load < name.tar
+
+docker run -itd -P --name mycontainer som2018/my_images  > will generate a random port for the hosts.
+
+docker run -itd -p 9999:80 --name mycontainer som2018/my_images > specifying the port no. e.g wordpress runs on 80 port forwarded to 9999 of hosts
+
+docker network ls > to see list of n/w.s
+                    1. bridge: mostly used have diff. network w.r.t container. here we use port forwarding technique.
+		    2. hosts: have same n/w that of containers
+                    3. no n/w connections
+                    4. overlay n/w is used to help to connect b/w container
+                    5. docker gw_bridge is what allows to connect b/w containers
+
+docker inspect bridge  > to see details of bridge network, shows which network it belongs to
+
+docker inspect container name > same as above but shows details of a container
+
+docker swarm init --adveritse-addr IP_Address 
+
+docker swarm leave > If a  worker needed to leave a manager and join another
+
+docker node ls > list of the docker cluster
+
+docker service create --name svc1(svc1=a container name) -p 8010:8080 docker_image_name > to run a container in docker swarm and port will be universal for all clusters
+
+docker service ls > to list of services running in docker cluster
+
+docker service ps svc1 > to see deatiled info of the service like where its running no. of copies of it etc.
+
+docker service scale svc1=10 > making multiple containers for redundency also it will be auto balanced b/w the worker nodes. can be used to decrease as well
+
+docker service rm svc1 > remove services
+
+docker network create -d overlay customoverlay1  > create a custom network. we do this when we dont want some group of container not talk with each other and better management
+
+docker service create --name svc3 --network customoverlay1 -p 80:80 nginx > to assign the custom network later on cant be modified.
+
+
+
+
+
+docker node update --availibility drain manager
+docker node update --avaibility active manager
+
+
+===========================
+
+
+docker service create svc1 -P nginx
+
+docker service scale svc1=5
+
+docker node update --avaibility drain/active hostname
+
+docker network create -d overlay custom1
+
+docker service create  --name svc1 -P --network custom1 -v hostfolder:/remotefolder nginx 
+
+docker export containername > abc.tar
+docker import -name abcd < abc.tar
+
+
+ 

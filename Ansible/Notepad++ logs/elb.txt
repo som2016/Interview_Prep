@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: fetch
+      ec2_elb_facts: 
+        names: deployapp
+        region: us-west-1
+      register: elb_facts
+    - debug: var=elb_facts
+    
+    - name: De-register instances from ELB
+      ec2_elb:
+        instance_id:"{{ item.instances }}"
+        region: us-west-1
+        state: absent
+      with_items: "{{ elb_facts.elbs }}"

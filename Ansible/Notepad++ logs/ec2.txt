@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  ignore_errors: yes
+  tasks:
+  - name: launch simple ec2 instance
+    ec2:
+     aws_access_key: AKIAJM6MFIOHBKYC5ZTQ
+     aws_secret_key: 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
+     instance_type: t2.micro
+     key_name: id_rsa
+     image: ami-011b6930a81cd6aaf
+     region: us-west-1
+     group_id: sg-f591868d
+     count: 1
+     vpc_subnet_id: subnet-115a784a
+     
+     wait: yes
+     assign_public_ip: yes
+    register: ec2s
+  
+  - name: ec2 debug ouput
+    debug: 
+	 var: ec2s
+	 verbosity: 1
+   
+    

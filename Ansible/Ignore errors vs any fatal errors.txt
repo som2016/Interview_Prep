@@ -1,0 +1,12 @@
+The any_errors_fatal play option will mark all hosts as failed if any fails, causing an immediate abort:
+- hosts: somehosts
+  any_errors_fatal: true
+  roles:
+    - myrole
+
+Ignoring Failed Commands
+
+- name: this will not be counted as a failure
+  command: /bin/false
+  ignore_errors: yes
+

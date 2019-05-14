@@ -1,0 +1,10 @@
+#!/bin/bash
+
+date
+ls -l
+pwd
+systemctl restart httpd
+systemctl restart tomcat
+
+
+

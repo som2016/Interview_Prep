@@ -1,0 +1,34 @@
+-----------------------xxxxxx-----------------------------
+                Ansible Core Modules:
+-----------------------xxxxxx----------------------------
+Yum
+apt
+copy
+shell
+command
+raw
+debug
+async & Polling
+delgate_to
+serial
+register
+tags
+run_once
+when
+stat
+setup
+vars_prompt
+loops(With_items&item)
+file
+acl access control list
+syncronization
+patch
+archive
+cron (24 mods)
+wait
+pause
+blockinfile
+apt_key
+local_action vs delegate_to
+uri or Rest Api
+jinja2 template or simply template

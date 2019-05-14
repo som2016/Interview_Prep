@@ -1,0 +1,23 @@
+wordpress:  //container1
+ image: wordpress //image present in docker hub
+ links: //will start after starting mariadb
+ - wordpress_db:mysql
+ ports:  //forwarding port to hosts
+ - "8800:80"  // 80 is the original port and is forwarded to 8080 of hosts
+
+wordpress_db:
+ image: mariadb
+ environment:
+  MYSQL_ROOT_PASSWORD: abc123
+
+phpadmin:
+ image: corbinu/docker-phpmyadmin
+ links:
+ - wordpress_db:mysql
+ environment:
+  MYSQ_USERNAME: root
+  MYSQL_ROOT_PASSWORD: abc123
+ ports:
+ - "7700:80"
+
+ 

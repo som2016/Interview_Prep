@@ -1,0 +1,29 @@
+image is a static file thru which we run containers
+
+We use docker due to its containerization feature which is light weight and can run many such container open close whenever we want with
+ease. virtualization done to os not to h/w.
+
+
+Registry: is a service to store images like docker hub(which is a public registry). companies can have their own registry. A registry will have repository and 
+repo will have images.
+
+docker.io/myrepo/tagname> docker.io=registry, myrepo=repo under docker.io registry, tagname=imagename, if we dont give tag name it will
+auto pick up "latest" as its name.
+
+tags will show the images in docker hub portal.
+
+need to know bind mounts
+
+all container ip will be under same network so that they can share
+
+Dockerfile > used for creating custom image
+
+Docker-compose > used for spinning up multiple docker at once with each connected with other. like a app server a dbserver containers etc.
+
+Docker Swarm: Its a technique/tool to manage multiple containers running in cluster of docker hosts
+              1. high availibility
+              2. Auto Load balancing
+              3. Scale up and down according to our need
+
+
+

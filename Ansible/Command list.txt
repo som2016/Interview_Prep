@@ -1,0 +1,37 @@
+ansilble -m ping webservers/all (--ask-pass)optional  // to ping to remote servers
+
+ansible -m command -a "uptime" webservers
+
+ansible-doc command
+
+ansible-playbook playbook_name.yml --syntax-check
+
+***********************ansible using adhoc commands **************************************************************
+ansible webservers -m user -a "name=user2 passowrd=redhat" -s  //where -m=module, -a=attributes -s=become sudo user
+
+ansible webservers -m yum -a "name=httpd state=present" -s  
+
+ansible webservers -m service -a "name=httpd state=started" -s
+
+ansible webservers -m service -a "name=httpd state=started enabled=yes" -s
+
+ansible webservers -m copy -a "name=/tmp/ansiblecopy.txt dest=/tmp/ansible.txt"
+
+ansible webservers -m git -a "git=git_url dest=remote_dest version=Head" -s  // to copy a git repo to remote server
+
+ansible webservers -m setup -a "filter=ansible_user*"  // to see all the details of a remote machine we run setup modules & to filter the messages
+                                                          we use filter attribute. if fired untill setup it will show all the msg's.
+
+ansible-galaxy init foldername //to create roles
+ansible-galaxy install --roles-path /etc/ansible/roles geerlingguy.pip //name of the role that need to be downloaded
+
+*********************************************************************************************************************
+
+
+
+
+
+
+
+
+

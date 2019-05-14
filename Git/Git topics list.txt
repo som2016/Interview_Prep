@@ -1,0 +1,95 @@
+git init
+
+git add
+
+git commit -m "message"
+
+git commit -a -m "Updating a file with adding(staging) & Commiting"
+
+git status (check current status of your working dir)
+
+git diff file_name (to check diff. b/w a commited file & an Unstaged/untracked file)
+
+git diff --staged file_name (to check diff. b/w a commited file & an staged/tracked file)
+
+git ls-files (to check list of commited files)
+
+git rm file_name (to remove both from local dir. and from working dir.)
+
+git rm --cached file_name (to remove a file from only local repo and not from working dir.)
+
+create .gitingnore (file and enter list of files and dir. you want it to be no further tracked)
+
+git log (full list and detailed log)
+
+git log --oneline (shows only commit-id and commit message)
+
+git commit --amend -m "Edit commited messege"  (changes commit name for first commit id)
+
+git tag -a v2.0 commit_id -m "commit messege" (adding a tag to a commit id)
+
+git tag (show tags)
+
+git show V2.0 (show details of this commit-id)
+
+git revert commit-id (Undo the commit)
+
+git branch (shows current branch)
+
+git checkout -b b1 (creating branch of name b1 from master)
+
+git merge b1 (1st be in master{to Branch} from b1{from Branch} Without conflict)
+
+git merge b1 (In case of conflict occures for a same file where a user/multiple user changed and want to update we need to merge then edit the file manually
+              and add and commit then issue will be resolved) 
+
+git reset --hard commit-id (head points to the mentioned commit-id and forgets about previous ones)
+            {hard-> delete files and forgets previous commits, any commited and uncomitted changes willbe removed from work. dir. as well}
+            {Soft-> it will just make the file uncommit but it will be still tracked no files removed or nothing changed in wok dir.}
+            {Mixed-> similar to soft only it will make the file untracked as well and not uncommited to local repo} 
+
+
+git stash ({Stash saves "TRACKED files" temporarily to make dir. clean})
+
+git stash list (shows the stash id e.g{stash@{0}})
+
+git Stash pop stash_id ( {to bring back the un commited changes without deleting the stash}unpop the all stashed items{deletes stash automatically} can be implied to any branch)
+
+git stash clear {delete the stash or stash id to del. particular stash}
+
+git stash apply stash_id (to bring back the un commited changes without deleting the stash)
+
+git stash -p (for Partially pulling files)
+
+git rebase master/branch_name (Its similar to merge but it wont create a new commit id instead will sit in b/w your commit in new branch & the master branch)
+   {19672a3 My 5th commit  // made 3rd commit and created a new branch, in new  branch again created a commit
+   1f46c4c My 4th commit   // then in master again a new commit. want the new master commit to merge
+   e389551 My third commit  // with new branch but without new commit.
+   acdc545 my Second commit
+   6e593b4 Updating}  //  Rebasing is the process of moving or combining a sequence of commits to a new base commit. 
+
+git branch -d Branch_name (Delete branch, in case not in sync with master use -D to del. forefully)
+
+git remote add origin "https://github.com/som2016/gitdemorepo.git" (origin is a pointer/alias name to point this particular repo)
+
+git push origin Branch_name (Push changes to github)
+
+git pull origin  master (to pull a single or few multiple files) 
+
+git push origin --delete branch_name (to delete github Branch) 
+
+git clone "https://github.com/som2016/gitdemorepo.git"
+
+git archive --format=zip HEAD > myapp.zip >> archive an application. Used when we send it for UAT in aws Benstalk.
+
+git fetch origin (Only to see any changes in git hub just compare) (Pull will download the changes(Fetch+merge) where as download is just show the changes )
+
+git cherry-pick commit_id (first go to the branch where u want the commit to merge to. )  //You're working in a feature branch that isn't quite ready for a full merge but you do have a 
+                           few commits in there that you want to push to master. IN git log you will see your cherry-picked commit at the top.
+
+*If there is a conflict with a same file b/w local and remote after commit when trying to push it will fail make changes commit again and then push. (same as local)*
+
+
+
+
+

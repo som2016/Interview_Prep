@@ -1,0 +1,24 @@
+1. install samba
+2. /etc/samba/smb.conf
+3. in global change:
+     a. allow hosts & deny hosts.
+     b. work group etc.
+4. then disable the home sharing folder
+   create your own like [abc]
+                         path= /path
+                         guest ok=no 
+                         etc.
+5. Create samba user/ user should already be defined locally in linux server then only samba will allow to add that user
+    smbpasswd -a user1
+    password:
+    create a group>> smbgroup
+    chown :smbgroup /path
+    usermod -G smbgroup user1
+
+Step 6: Mounting the Samba Share in Linux
+
+6. start and enable samba
+7. in windows server check in add windows feature samba is enabled or not
+   enter samba server ip and then access
+
+https://www.tecmint.com/setup-samba-file-sharing-for-linux-windows-clients/
